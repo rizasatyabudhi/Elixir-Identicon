@@ -1,2 +1,13 @@
 * Struct = a map that is used to store data in elixir
   * advantage from map = can be assigned default values
+
+* Note on struct
+We aren't required to pattern match every key and value in a map/struct.
+The opposite is true when using a list.
+
+In short:
+Lists require us to consider each element.
+Maps/Structs do not require us to consider each key/value pair.
+
+* To reference a function, we use:
+ *  |> Enum.map(&mirror_row/1)
