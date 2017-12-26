@@ -48,9 +48,11 @@ defmodule Identicon do
 
   def filter_odd_squares(%Identicon.Image{grid: grid} = image) do
     # Take the "first" index from grid
-    Enum.filter(grid, fn({first,_second}) ->
+    grid = Enum.filter(grid, fn({first,_second}) ->
       rem(first,2) == 0
     end)
+
+    %Identicon.Image{image | grid: grid}
   end
 
 end
