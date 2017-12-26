@@ -5,6 +5,10 @@ defmodule Identicon do
     |> pick_color
     |> build_grid
     |> filter_odd_squares
+    |> build_pixel_map
+    |> draw_image
+    # input is the second argument, the fist argument is the image from draw_image
+    |> save_image(input)
   end
 
   def hash_string(input) do
@@ -48,11 +52,36 @@ defmodule Identicon do
 
   def filter_odd_squares(%Identicon.Image{grid: grid} = image) do
     # Take the "first" index from grid
-    grid = Enum.filter(grid, fn({first,_second}) ->
-      rem(first,2) == 0
+    grid = Enum.filter(grid, fn({code, _index}) ->
+      rem(code,2) == 0
     end)
 
     %Identicon.Image{image | grid: grid}
   end
 
+  def build_pixel_map(%Identicon.Image{grid: grid} = image) do
+    pixel_map = Enum.map grid, fn({_code, index}) ->
+      horizontal = rem(index,5) * 50
+      vertical = div(index,5) * 50
+
+      top_left = {horizontal,vertical}
+      bottom_right = {horizontal+50,vertical+50}
+    end
+    %Identicon.Image{image | pixel_map: pixel_map}
+  end
+
+  def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
+    image = :egd.create(255,255)
+    fill = :egd.color(color)
+
+    Enum.each pixel_map, fn({start, stop}) ->
+      :egd.filledRectangle(image,start,stop,fill)
+    end
+
+    :egd.render(image)
+  end
+
+  def save_image(image,input) do
+    File.write("#{input}.png", image)
+  end
 end
