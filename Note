@@ -1,0 +1,2 @@
+* Struct = a map that is used to store data in elixir
+  * advantage from map = can be assigned default values
