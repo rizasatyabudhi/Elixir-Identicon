@@ -33,11 +33,16 @@ defmodule Identicon do
   end
 
   def build_grid(%Identicon.Image{hex: hex} = image) do
-    hex
-    |> Enum.chunk(3)
-    # use & to reference a function
-    |> Enum.map(&mirror_row/1)
-  end
+    # assign the pipe operator to "grid" variable
+    grid =
+      hex
+      |> Enum.chunk(3)
+      # use & to reference a function
+      |> Enum.map(&mirror_row/1)
+      |> List.flatten
+      |> Enum.with_index
 
+    %Identicon.Image{image | grid: grid}
+  end
 
 end
