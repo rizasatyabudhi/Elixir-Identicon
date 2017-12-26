@@ -15,13 +15,16 @@ defmodule Identicon do
     %Identicon.Image{hex: hex}
   end
 
-  def pick_color(image) do
-    # %Identicon.Image{hex: [r,g,b | _tail]} = image
-    %Identicon.Image{hex: hex_list} = image
-
-    # hex_list actually has more than [r,g,b] 3 character,
-    # so we have to assign them as _tail
-    [r,g,b | _tail] = hex_list
-    [r,g,b]
+  def pick_color(%Identicon.Image{hex: [r,g,b | _tail]} = image) do
+    %Identicon.Image{image | color: {r,g,b}}
   end
+
+  # Same as above
+  # def pick_color(image) do
+  #   %Identicon.Image{hex: [r,g,b | _tail]} = image
+  #   %Identicon.Image{image | color: {r,g,b}}
+  # end
+
+
+
 end
