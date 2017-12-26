@@ -4,6 +4,7 @@ defmodule Identicon do
     |> hash_string
     |> pick_color
     |> build_grid
+    |> filter_odd_squares
   end
 
   def hash_string(input) do
@@ -11,12 +12,12 @@ defmodule Identicon do
     # :binary.bin_to_list(hex)
     hex = :crypto.hash(:md5,input)
     |> :binary.bin_to_list
-
     # assign the return value into the struct
     %Identicon.Image{hex: hex}
   end
 
   def pick_color(%Identicon.Image{hex: [r,g,b | _tail]} = image) do
+    # assign/concat color to the struct
     %Identicon.Image{image | color: {r,g,b}}
   end
 
@@ -43,6 +44,13 @@ defmodule Identicon do
       |> Enum.with_index
 
     %Identicon.Image{image | grid: grid}
+  end
+
+  def filter_odd_squares(%Identicon.Image{grid: grid} = image) do
+    # Take the "first" index from grid
+    Enum.filter(grid, fn({first,_second}) ->
+      rem(first,2) == 0
+    end)
   end
 
 end
